@@ -1,4 +1,5 @@
-with Ada.Text_IO, Ada.Integer_Text_IO, Ada.Numerics.Discrete_Random;
+
+with Ada.Text_IO, Ada.Integer_Text_IO, Ada.Numerics.Discrete_Random, Ada.Unchecked_Deallocation;
 use Ada.Text_IO, Ada.Integer_Text_IO;
  
 procedure Lab4Lista is
@@ -60,30 +61,90 @@ begin
 end Insert_Sort;
 
 procedure Generate_And_Insert(List: in out Elem_Ptr; N : in Integer; M : in Integer) is
+  subtype Random_Range is Integer range 0 .. M;
+  package Random_Generator is new Ada.Numerics.Discrete_Random (Random_Range);
+  use Random_Generator;
   Gen: Generator;
-  Number: integer;
+  Number: Integer;
 begin
   Reset(Gen);
   for I in 1..N loop
     Number := Random(Gen) mod M;
     Insert_Sort(List, Number);
   end loop;
-end
+end;
+
+function Find(List: in Elem_Ptr; El: in Integer) return access Element is
+  L: access Element := List;
+begin
+  while L.Next /= Null loop
+    if L.Data = El then
+      return L;
+    else
+      L := L.Next;
+    end if;
+  end loop;
+  return Null;
+end Find;
+
+procedure Deallocate is new Ada.Unchecked_Deallocation(Element, Elem_Ptr);
+
+procedure Remove(List: in out Elem_Ptr; El: in Integer) is
+	L : access Element := List;
+	Temp : access Element;
+begin	
+  if L /= Null then
+    if L.Data = El then
+      Temp := L;
+      L := L.Next;
+      Deallocate(Temp);
+    else
+      if L /= Null then
+        while L.Next /= Null loop
+          if L.Next.Data = El then
+            Temp := L.Next.Next;
+            Deallocate(L.Next);
+            L.Next := Temp;
+          end if;
+          L := L.Next;
+        end loop;	
+      end if;
+    end if;
+  end if;
+end Remove;
  
 Lista : Elem_Ptr := Null;
+Result: access Element := Null;
  
 begin
   Print(Lista);
+
   Lista := Insert(Lista, 21);
   Print(Lista);
+
   Insert(Lista, 20); 
   Print(Lista);
+
   for I in reverse 1..12 loop
-  Insert(Lista, I);
+    Insert(Lista, I);
   end loop;
   Print(Lista);
 
   Generate_And_Insert(Lista, 4, 24);
   Print(Lista);
 
+  Result := Find(Lista, 12);
+
+
+  -- Removing
+  Lista := Null;
+  for I in reverse 1..12 loop
+    Insert(Lista, I);
+  end loop;
+  Print(Lista);
+
+  -- Remove(Lista, 1);
+  -- Remove(Lista, 12);
+  
+  Print(Lista);
 end Lab4Lista;
