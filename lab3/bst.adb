@@ -86,11 +86,7 @@ end;
 function Serialize(Tree: in out Node_Ptr) return String is
 begin
     if Tree /= Null then
-        return "{"
-		& """data"":" & Integer'Image(Tree.Data)
-        & ",""left"":" & Serialize(Tree.Left)
-        & ",""right"":" & Serialize(Tree.Right) 
-        & "}";
+        return "{" & """data"":" & Integer'Image(Tree.Data) & ",""left"":" & Serialize(Tree.Left) & ",""right"":" & Serialize(Tree.Right) & "}";
     else
         return "null";
     end if;
