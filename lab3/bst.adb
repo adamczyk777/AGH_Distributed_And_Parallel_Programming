@@ -1,5 +1,5 @@
-with Ada.Text_IO, Ada.Numerics.Discrete_Random, Ada.Unchecked_Deallocation;
-use Ada.Text_IO;
+with Ada.Text_IO, Ada.Numerics.Discrete_Random, Ada.Unchecked_Deallocation, Ada.Strings;
+use Ada.Text_IO, Ada.Strings;
 
 procedure BST is
 -- typ - węzeł drzewa binarnego
@@ -82,11 +82,19 @@ begin
 	end if; 
 end;
 
-procedure Delete(Tree: in out Node_Ptr; El: in Integer) is
-
+-- serializacja
+function Serialize(Tree: in out Node_Ptr) return String is
 begin
-
-end Delete;
+    if Tree /= Null then
+        return "{"
+		& """data"":" & Integer'Image(Tree.Data)
+        & ",""left"":" & Serialize(Tree.Left)
+        & ",""right"":" & Serialize(Tree.Right) 
+        & "}";
+    else
+        return "null";
+    end if;
+end Serialize;
 
 Tree : Node_Ptr := Null;
 
@@ -96,5 +104,9 @@ begin
 	Insert(Tree,15);
 
 	Print(Tree);
+
+	Put_Line(Boolean'Image(Search(Tree, 15)));
+
+	Put_Line(Serialize(Tree));
 
 end BST;
