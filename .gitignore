@@ -2,3 +2,5 @@
 *.o
 
 *.beam
+
+./**/.DS_Store
