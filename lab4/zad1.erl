@@ -17,5 +17,5 @@ objetosc({stozek, R, H}) -> 1/3*3.14*R*R*H.
 
 % dlugosc listy
 
-len(list)
+len(list).
 
