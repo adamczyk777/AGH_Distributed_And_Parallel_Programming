@@ -25,3 +25,10 @@ inorder(Tree) when Tree#node.value == nil -> [];
 inorder(nil) -> [];
 inorder(Tree) ->
     inorder(Tree#node.left) ++ [Tree#node.value] ++ inorder(Tree#node.right).
+
+search(nil, _) -> false;
+search(Tree, Val) when Tree#node.value == Val -> true;
+search(Tree, Val) when Tree#node.value > Val ->
+    search(Tree#node.left, Val);
+search(Tree, Val) ->
+    search(Tree#node.right, Val).
