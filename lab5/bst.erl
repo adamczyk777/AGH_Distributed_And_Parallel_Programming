@@ -15,7 +15,7 @@ randomBst(Length) ->
 
 bstFromList([]) -> nil;
 bstFromList([H|L]) -> 
-    insert(bstFromList(L, nil), H).
+    bstFromList(L, insert(nil, H)).
 bstFromList([], Tree) ->
     Tree;
 bstFromList([H|L], Tree) ->
